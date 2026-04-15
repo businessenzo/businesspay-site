@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>BusinessPay — O Gateway que Trabalha por Você</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
   <style>
     /* =============================================
        RESET & BASE
@@ -42,9 +42,7 @@
       line-height: 1.65;
     }
 
-    /* =============================================
-       NOISE OVERLAY
-    ============================================= */
+    /* NOISE OVERLAY */
     body::before {
       content: '';
       position: fixed;
@@ -55,17 +53,13 @@
       opacity: 0.5;
     }
 
-    /* =============================================
-       SCROLLBAR
-    ============================================= */
+    /* SCROLLBAR */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--deep); }
     ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 99px; }
 
-    /* =============================================
-       UTILITY
-    ============================================= */
-    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    /* UTILITY */
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 20px; width: 100%; }
     .grad-text {
       background: var(--grad);
       -webkit-background-clip: text;
@@ -79,22 +73,20 @@
       letter-spacing: 0.06em; text-transform: uppercase;
       padding: 6px 14px; border-radius: 99px;
     }
-    .tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rose); animation: pulse 2s infinite; }
+    .tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rose); animation: pulse 2s infinite; flex-shrink:0; }
 
     @keyframes pulse {
       0%,100% { transform: scale(1); opacity:1; }
       50%      { transform: scale(1.5); opacity:0.6; }
     }
 
-    /* =============================================
-       BUTTONS
-    ============================================= */
+    /* BUTTONS */
     .btn {
-      display: inline-flex; align-items: center; gap: 10px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
       font-family: var(--font-body); font-size: 0.95rem; font-weight: 600;
       padding: 14px 28px; border-radius: 99px; cursor: pointer;
       text-decoration: none; border: none; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-      white-space: nowrap;
+      white-space: nowrap; position: relative; overflow: hidden;
     }
     .btn-primary {
       background: var(--grad); color: #fff;
@@ -113,16 +105,23 @@
       border-color: rgba(255,255,255,0.22);
     }
     .btn-lg { padding: 17px 36px; font-size: 1.05rem; }
+    .btn-white { background: #fff; color: var(--red); font-weight: 700; }
+    .btn-white:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .btn-outline-white { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); }
+    .btn-outline-white:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
     .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    /* =============================================
-       SECTION SPACING
-    ============================================= */
+    /* RIPPLE */
+    .ripple {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.25); transform: scale(0);
+      animation: rippleAnim 0.6s linear; pointer-events: none;
+    }
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
     section { padding: 100px 0; position: relative; }
 
-    /* =============================================
-       BG BLOBS
-    ============================================= */
+    /* BG BLOBS */
     .blob {
       position: absolute; border-radius: 50%; filter: blur(90px);
       pointer-events: none; z-index: 0;
@@ -130,6 +129,44 @@
     .blob-1 { width: 600px; height: 600px; background: rgba(232,25,60,0.14); top: -200px; right: -200px; }
     .blob-2 { width: 500px; height: 500px; background: rgba(255,77,126,0.10); bottom: -150px; left: -150px; }
     .blob-3 { width: 400px; height: 400px; background: rgba(232,25,60,0.09); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+    /* =============================================
+       MOBILE MENU OVERLAY
+    ============================================= */
+    .mobile-menu {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(13,10,15,0.98); backdrop-filter: blur(24px);
+      z-index: 999; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+    .mobile-menu a {
+      font-family: var(--font-display); font-size: 2rem; font-weight: 800;
+      color: var(--text); text-decoration: none;
+      transition: color 0.2s; letter-spacing: -0.02em;
+      padding: 12px 0;
+      transform: translateY(30px);
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease, color 0.2s;
+    }
+    .mobile-menu.open a { transform: translateY(0); opacity: 1; }
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.10s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.20s; }
+    .mobile-menu.open a:nth-child(5) { transition-delay: 0.25s; }
+    .mobile-menu.open a:nth-child(6) { transition-delay: 0.30s; }
+    .mobile-menu a:hover { color: var(--rose); }
+    .mobile-menu-btns {
+      display: flex; flex-direction: column; gap: 12px; width: 240px;
+      margin-top: 20px;
+      transform: translateY(30px); opacity: 0;
+      transition: transform 0.4s ease 0.35s, opacity 0.4s ease 0.35s;
+    }
+    .mobile-menu.open .mobile-menu-btns { transform: translateY(0); opacity: 1; }
+    .mobile-menu-btns .btn { width: 100%; }
 
     /* =============================================
        NAVBAR
@@ -140,8 +177,8 @@
       transition: all 0.4s ease;
     }
     .navbar.scrolled {
-      background: rgba(13,10,15,0.85);
-      backdrop-filter: blur(20px);
+      background: rgba(13,10,15,0.90);
+      backdrop-filter: blur(24px);
       padding: 14px 0;
       border-bottom: 1px solid var(--border);
       box-shadow: 0 4px 40px rgba(0,0,0,0.4);
@@ -151,12 +188,9 @@
     }
     .logo {
       display: flex; align-items: center; gap: 12px;
-      text-decoration: none;
+      text-decoration: none; flex-shrink: 0;
     }
-    .logo-icon {
-      width: 44px; height: 44px;
-      position: relative;
-    }
+    .logo-icon { width: 44px; height: 44px; position: relative; }
     .logo-text {
       font-family: var(--font-display); font-size: 1.35rem; font-weight: 800;
       background: var(--grad); -webkit-background-clip: text;
@@ -176,8 +210,18 @@
     .nav-links a:hover { color: var(--text); }
     .nav-links a:hover::after { transform: scaleX(1); }
     .nav-cta { display: flex; align-items: center; gap: 12px; }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
-    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      background: none; border: none; padding: 6px; z-index: 1001;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text); border-radius: 2px; transition: all 0.35s cubic-bezier(0.23,1,0.32,1);
+      transform-origin: center;
+    }
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     @media (max-width: 768px) {
       .nav-links, .nav-cta { display: none; }
@@ -200,12 +244,12 @@
     .hero-tag { margin-bottom: 28px; }
     .hero-headline {
       font-family: var(--font-display);
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
       font-weight: 800; line-height: 1.1;
       letter-spacing: -0.02em; margin-bottom: 22px;
     }
     .hero-sub {
-      font-size: 1.18rem; color: var(--muted);
+      font-size: 1.1rem; color: var(--muted);
       max-width: 440px; margin-bottom: 36px; line-height: 1.7;
     }
     .hero-btns { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
@@ -224,14 +268,12 @@
     .proof-text { font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
     .proof-text strong { color: var(--text); display: block; font-size: 1rem; }
 
-    /* Hero right — floating card mockup */
+    /* Hero right */
     .hero-right {
       position: relative; z-index: 2;
       display: flex; justify-content: center; align-items: center;
     }
-    .hero-card-wrap {
-      position: relative; width: 360px;
-    }
+    .hero-card-wrap { position: relative; width: 360px; max-width: 100%; }
     .hero-card {
       background: rgba(255,255,255,0.04);
       backdrop-filter: blur(20px);
@@ -257,28 +299,22 @@
       margin-bottom: 6px; letter-spacing: -0.02em;
     }
     .card-label { font-size: 0.82rem; color: var(--muted); margin-bottom: 22px; }
-    .mini-bar {
-      height: 6px; background: rgba(255,255,255,0.07); border-radius: 99px;
-      overflow: hidden; margin-bottom: 6px;
-    }
-    .mini-bar-fill {
-      height: 100%; width: 78%; border-radius: 99px;
-      background: var(--grad); animation: fillAnim 2s ease forwards;
-    }
+    .mini-bar { height: 6px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; margin-bottom: 6px; }
+    .mini-bar-fill { height: 100%; width: 78%; border-radius: 99px; background: var(--grad); animation: fillAnim 2s ease forwards; }
     @keyframes fillAnim { from { width:0; } to { width:78%; } }
     .mini-bar-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 22px; }
     .txn-list { display: flex; flex-direction: column; gap: 12px; }
-    .txn-item { display: flex; align-items: center; gap: 12px; }
+    .txn-item { display: flex; align-items: center; gap: 12px; transition: all 0.4s ease; }
     .txn-icon {
       width: 36px; height: 36px; border-radius: 10px;
       background: var(--grad-soft); border: 1px solid rgba(232,25,60,0.2);
       display: flex; align-items: center; justify-content: center;
       font-size: 1rem; flex-shrink: 0;
     }
-    .txn-info { flex: 1; }
-    .txn-info strong { display: block; font-size: 0.85rem; font-weight: 600; }
+    .txn-info { flex: 1; min-width: 0; }
+    .txn-info strong { display: block; font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .txn-info span { font-size: 0.75rem; color: var(--muted); }
-    .txn-amount { font-size: 0.9rem; font-weight: 700; }
+    .txn-amount { font-size: 0.9rem; font-weight: 700; white-space: nowrap; }
     .txn-amount.plus { color: #10B981; }
 
     /* Floating badge */
@@ -301,12 +337,24 @@
     .fb-pix { color: #10B981; }
 
     @media (max-width: 900px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .hero-right { margin-top: 40px; }
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-sub { max-width: 100%; }
+      .hero-btns { justify-content: center; }
+      .hero-proof { justify-content: center; }
+      .hero-right { margin-top: 50px; }
+      .fb-top { right: -10px; }
+      .fb-bot { left: -10px; }
+    }
+    @media (max-width: 480px) {
+      #hero { padding: 100px 0 60px; }
+      .hero-card-wrap { width: 100%; }
+      .float-badge { display: none; }
+      .hero-btns { flex-direction: column; width: 100%; }
+      .hero-btns .btn { width: 100%; }
     }
 
     /* =============================================
-       LOGOS / SOCIAL PROOF BAR
+       PROOF BAR
     ============================================= */
     #proof-bar {
       padding: 32px 0;
@@ -315,25 +363,34 @@
     }
     .proof-bar-inner {
       display: flex; align-items: center; justify-content: center;
-      gap: 48px; flex-wrap: wrap;
+      gap: 32px; flex-wrap: wrap;
     }
     .proof-num { text-align: center; }
-    .proof-num .n { font-family: var(--font-display); font-size: 1.9rem; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .proof-num .n {
+      font-family: var(--font-display); font-size: 1.9rem; font-weight: 800;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
     .proof-num .l { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
     .proof-div { width: 1px; height: 40px; background: var(--border); }
+    @media (max-width: 600px) { .proof-div { display: none; } }
+
+    /* =============================================
+       SECTION HEADER
+    ============================================= */
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-header .tag { margin-bottom: 20px; }
+    .section-title {
+      font-family: var(--font-display); font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 800; letter-spacing: -0.02em; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub { font-size: 1.05rem; color: var(--muted); max-width: 520px; margin: 0 auto; }
 
     /* =============================================
        FEATURES
     ============================================= */
     #features { overflow: hidden; }
-    .section-header { text-align: center; margin-bottom: 64px; }
-    .section-header .tag { margin-bottom: 20px; }
-    .section-title {
-      font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 800; letter-spacing: -0.02em; line-height: 1.15;
-      margin-bottom: 16px;
-    }
-    .section-sub { font-size: 1.05rem; color: var(--muted); max-width: 520px; margin: 0 auto; }
     .features-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: 20px;
@@ -347,8 +404,7 @@
     }
     .feat-card::before {
       content: ''; position: absolute; inset: 0; opacity: 0;
-      background: var(--grad-soft);
-      transition: opacity 0.4s;
+      background: var(--grad-soft); transition: opacity 0.4s;
     }
     .feat-card:hover::before { opacity: 1; }
     .feat-card:hover { border-color: rgba(232,25,60,0.3); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.3), var(--glow-sm); }
@@ -356,20 +412,16 @@
       width: 54px; height: 54px; border-radius: 14px;
       background: var(--grad-soft); border: 1px solid rgba(232,25,60,0.22);
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; margin-bottom: 20px;
-      position: relative; z-index: 1;
+      font-size: 1.5rem; margin-bottom: 20px; position: relative; z-index: 1;
     }
     .feat-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; position: relative; z-index: 1; }
     .feat-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.65; position: relative; z-index: 1; }
-
-    /* Big feature card */
     .feat-card.big { grid-column: span 2; }
-    @media (max-width: 900px) { .feat-card.big { grid-column: span 1; } }
     .feat-card.big .feat-title { font-size: 1.35rem; }
     .feat-card.big .feat-desc { font-size: 0.95rem; max-width: 440px; }
+    @media (max-width: 900px) { .feat-card.big { grid-column: span 1; } }
     .feat-card.accent {
-      background: var(--grad); border-color: transparent;
-      color: #fff;
+      background: var(--grad); border-color: transparent; color: #fff;
     }
     .feat-card.accent .feat-icon { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); }
     .feat-card.accent .feat-desc { color: rgba(255,255,255,0.75); }
@@ -380,6 +432,8 @@
        HOW IT WORKS
     ============================================= */
     #how { background: var(--surface); }
+    .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    @media (max-width: 800px) { .how-grid { grid-template-columns: 1fr; } }
     .steps { display: flex; flex-direction: column; gap: 0; }
     .step {
       display: grid; grid-template-columns: 80px 1fr;
@@ -389,26 +443,24 @@
     .step:last-child { border-bottom: none; }
     .step-num {
       width: 56px; height: 56px; border-radius: 50%;
-      background: var(--grad-soft); border: 1px solid rgba(232,25,60,0.3);
+      background: var(--grad); color: #fff;
       display: flex; align-items: center; justify-content: center;
       font-family: var(--font-display); font-size: 1.3rem; font-weight: 800;
-      background: var(--grad); color: #fff;
       box-shadow: var(--glow-sm); flex-shrink: 0;
     }
     .step-content h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
-    .step-content p { color: var(--muted); font-size: 0.95rem; max-width: 500px; }
+    .step-content p { color: var(--muted); font-size: 0.95rem; }
 
     /* =============================================
        METHODS
     ============================================= */
-    #methods { }
     .methods-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
     @media (max-width: 700px) { .methods-grid { grid-template-columns: 1fr; } }
     .method-card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--r-lg); padding: 36px 28px;
       display: flex; flex-direction: column; align-items: center; text-align: center;
-      transition: all 0.35s ease; cursor: default;
+      transition: all 0.35s ease;
     }
     .method-card:hover { transform: translateY(-6px); border-color: rgba(232,25,60,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
     .method-emoji { font-size: 2.8rem; margin-bottom: 16px; }
@@ -430,7 +482,9 @@
     .testi-card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--r-lg); padding: 28px;
+      transition: transform 0.3s ease;
     }
+    .testi-card:hover { transform: translateY(-4px); }
     .testi-stars { color: #F59E0B; font-size: 0.9rem; margin-bottom: 14px; letter-spacing: 2px; }
     .testi-text { font-size: 0.92rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
     .testi-author { display: flex; align-items: center; gap: 12px; }
@@ -443,9 +497,8 @@
     .testi-role { font-size: 0.76rem; color: var(--muted); }
 
     /* =============================================
-       GATEWAY SIMULATOR
+       SIMULATOR
     ============================================= */
-    #simulator { }
     .sim-wrap {
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 60px; align-items: center;
@@ -456,8 +509,6 @@
     .sim-checks { display: flex; flex-direction: column; gap: 12px; }
     .sim-check { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--muted); }
     .sim-check svg { width: 20px; height: 20px; color: #10B981; flex-shrink: 0; }
-
-    /* Payment form */
     .pay-form {
       background: var(--card); border: 1px solid var(--border);
       border-radius: var(--r-lg); padding: 36px;
@@ -484,19 +535,24 @@
     }
     .form-group select option { background: #1a1020; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .pay-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; padding: 14px 16px; background: rgba(255,255,255,0.04); border-radius: 10px; border: 1px solid var(--border); }
+    .pay-total {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 22px; padding: 14px 16px;
+      background: rgba(255,255,255,0.04); border-radius: 10px; border: 1px solid var(--border);
+    }
     .pay-total span { font-size: 0.85rem; color: var(--muted); }
-    .pay-total strong { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .pay-total strong {
+      font-family: var(--font-display); font-size: 1.4rem; font-weight: 800;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
     .pay-security { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; font-size: 0.76rem; color: var(--muted); }
     .pay-security svg { width: 14px; height: 14px; color: #10B981; }
-
-    /* Success overlay */
     .pay-success {
       position: absolute; inset: 0; background: rgba(13,10,15,0.96);
       backdrop-filter: blur(10px); border-radius: var(--r-lg);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
-      gap: 14px;
+      opacity: 0; pointer-events: none; transition: opacity 0.5s ease; gap: 14px;
     }
     .pay-success.show { opacity: 1; pointer-events: all; }
     .success-icon {
@@ -509,10 +565,9 @@
     .success-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: #10B981; }
     .success-sub { font-size: 0.88rem; color: var(--muted); text-align: center; max-width: 220px; }
     .success-badge { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #10B981; font-size: 0.75rem; font-weight: 700; padding: 5px 14px; border-radius: 99px; }
-    .success-reset { margin-top: 6px; }
 
     /* =============================================
-       PRICING TEASER
+       PRICING
     ============================================= */
     #pricing { background: var(--surface); }
     .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
@@ -526,7 +581,7 @@
       background: var(--grad); border-color: transparent;
       box-shadow: var(--glow), 0 20px 60px rgba(232,25,60,0.25);
     }
-    .price-card.featured:hover { transform: translateY(-8px) scale(1.02); box-shadow: var(--glow), 0 30px 80px rgba(232,25,60,0.35); }
+    .price-card.featured:hover { transform: translateY(-8px) scale(1.02); }
     .price-card:not(.featured):hover { transform: translateY(-6px); border-color: rgba(232,25,60,0.3); }
     .price-badge-popular {
       position: absolute; top: 16px; right: 16px;
@@ -535,13 +590,17 @@
       padding: 4px 12px; border-radius: 99px;
     }
     .price-plan { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; opacity: 0.7; }
-    .price-featured .price-plan { opacity: 1; }
     .price-amount { font-family: var(--font-display); font-size: 2.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 4px; }
     .price-amount sup { font-size: 1.1rem; vertical-align: top; margin-top: 10px; font-weight: 600; }
     .price-period { font-size: 0.82rem; opacity: 0.6; margin-bottom: 22px; }
     .price-list { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 10px; }
     .price-list li { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; opacity: 0.85; }
-    .price-list li::before { content: '✓'; width: 18px; height: 18px; border-radius: 50%; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #10B981; font-size: 0.65rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .price-list li::before {
+      content: '✓'; width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3);
+      color: #10B981; font-size: 0.65rem;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
     .price-card.featured .price-list li::before { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: #fff; }
     .price-btn-ghost {
       width: 100%; text-align: center; padding: 13px;
@@ -552,20 +611,98 @@
     .price-btn-ghost:hover { background: rgba(255,255,255,0.14); transform: translateY(-2px); }
     .price-btn-white {
       width: 100%; text-align: center; padding: 13px;
-      background: #fff; border: none;
-      border-radius: 12px; color: #E8193C; font-weight: 700; font-size: 0.9rem;
+      background: #fff; border: none; border-radius: 12px;
+      color: #E8193C; font-weight: 700; font-size: 0.9rem;
       cursor: pointer; transition: all 0.3s; text-decoration: none; display: block;
     }
     .price-btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
 
     /* =============================================
+       REWARDS SECTION
+    ============================================= */
+    #rewards { overflow: hidden; }
+    .rewards-intro { text-align: center; margin-bottom: 60px; }
+    .rewards-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 20px;
+    }
+    @media (max-width: 1000px) { .rewards-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 580px) { .rewards-grid { grid-template-columns: 1fr; } }
+    .reward-card {
+      background: #0A0A0A; border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 24px; padding: 32px 24px; text-align: center;
+      position: relative; overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .reward-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--grad);
+    }
+    .reward-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(0,0,0,0.5), var(--glow-sm); }
+    .reward-card.premium {
+      background: linear-gradient(160deg, #0f0f0f 0%, #1a0810 100%);
+      border-color: rgba(232,25,60,0.25);
+      box-shadow: var(--glow-sm);
+    }
+    .reward-plaque {
+      width: 90px; height: 110px;
+      background: linear-gradient(160deg, #1C1C1E 0%, #2C2C2E 50%, #1C1C1E 100%);
+      border-radius: 12px; margin: 0 auto 20px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .reward-card.premium .reward-plaque {
+      background: linear-gradient(160deg, #1a0810 0%, #2d0f1e 50%, #1a0810 100%);
+      border-color: rgba(232,25,60,0.3);
+    }
+    .reward-plaque-ghost { font-size: 2.2rem; }
+    .reward-plaque-name {
+      font-family: var(--font-display); font-size: 0.58rem; font-weight: 800;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .reward-level {
+      font-family: var(--font-display); font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 12px;
+    }
+    .reward-milestone {
+      font-family: var(--font-display); font-size: 1.7rem; font-weight: 800;
+      letter-spacing: -0.02em; margin-bottom: 16px;
+      background: var(--grad); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .reward-card.premium .reward-milestone { font-size: 2rem; }
+    .reward-items { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .reward-items li { font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; gap: 8px; justify-content: center; }
+    .reward-items li::before { content: '•'; color: var(--rose); font-size: 1.2rem; }
+
+    /* =============================================
+       SHIRT SECTION
+    ============================================= */
+    #shirt { background: var(--surface); }
+    .shirt-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    @media (max-width: 800px) { .shirt-wrap { grid-template-columns: 1fr; } }
+    .shirt-visual {
+      display: flex; justify-content: center; align-items: center;
+    }
+    .shirt-svg-wrap {
+      position: relative; filter: drop-shadow(0 30px 60px rgba(0,0,0,0.7));
+    }
+    .shirt-info h2 { font-family: var(--font-display); font-size: clamp(2rem,4vw,2.8rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 18px; line-height: 1.15; }
+    .shirt-info p { color: var(--muted); font-size: 1rem; margin-bottom: 28px; line-height: 1.7; }
+    .shirt-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .shirt-tag {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 99px; padding: 6px 16px; font-size: 0.82rem; color: var(--muted);
+    }
+
+    /* =============================================
        CTA BANNER
     ============================================= */
-    #cta {
-      padding: 80px 0;
-      text-align: center;
-      position: relative; overflow: hidden;
-    }
+    #cta { padding: 80px 0; text-align: center; position: relative; overflow: hidden; }
     .cta-inner {
       background: var(--grad); border-radius: 32px;
       padding: 72px 40px; position: relative; overflow: hidden;
@@ -575,24 +712,22 @@
       background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3C/g%3E%3C/svg%3E");
     }
     .cta-inner h2 {
-      font-family: var(--font-display); font-size: clamp(2rem,4vw,3rem);
+      font-family: var(--font-display); font-size: clamp(1.8rem,4vw,3rem);
       font-weight: 800; color: #fff; margin-bottom: 16px;
       letter-spacing: -0.02em; position: relative; z-index: 1;
     }
     .cta-inner p { color: rgba(255,255,255,0.75); font-size: 1.1rem; max-width: 500px; margin: 0 auto 36px; position: relative; z-index: 1; }
     .cta-btns { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; position: relative; z-index: 1; }
-    .btn-white { background: #fff; color: var(--red); font-weight: 700; }
-    .btn-white:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
-    .btn-outline-white { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); }
-    .btn-outline-white:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    @media (max-width: 480px) {
+      .cta-inner { padding: 48px 24px; }
+      .cta-btns { flex-direction: column; width: 100%; }
+      .cta-btns .btn { width: 100%; }
+    }
 
     /* =============================================
        FOOTER
     ============================================= */
-    footer {
-      padding: 60px 0 32px;
-      border-top: 1px solid var(--border);
-    }
+    footer { padding: 60px 0 32px; border-top: 1px solid var(--border); }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 52px; }
     @media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 500px) { .footer-grid { grid-template-columns: 1fr; } }
@@ -609,22 +744,15 @@
     /* =============================================
        SCROLL ANIMATIONS
     ============================================= */
-    .reveal {
-      opacity: 0; transform: translateY(36px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
+    .reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
     .reveal-delay-1 { transition-delay: 0.1s; }
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
 
-    /* =============================================
-       HERO ENTRANCE ANIMATION
-    ============================================= */
-    .hero-animate {
-      animation: heroIn 0.9s cubic-bezier(0.22,1,0.36,1) both;
-    }
+    /* HERO ENTRANCE */
+    .hero-animate   { animation: heroIn 0.9s cubic-bezier(0.22,1,0.36,1) both; }
     .hero-animate-2 { animation: heroIn 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s both; }
     .hero-animate-3 { animation: heroIn 0.9s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
     .hero-animate-4 { animation: heroIn 0.9s cubic-bezier(0.22,1,0.36,1) 0.45s both; }
@@ -632,24 +760,167 @@
     @keyframes heroIn { from { opacity:0; transform: translateY(40px); } to { opacity:1; transform:translateY(0); } }
     @keyframes heroInRight { from { opacity:0; transform: translateX(60px) scale(0.95); } to { opacity:1; transform:translateX(0) scale(1); } }
 
-    /* Ripple on btn click */
-    .btn { overflow: hidden; }
-    .ripple {
-      position: absolute; border-radius: 50%;
-      background: rgba(255,255,255,0.25); transform: scale(0);
-      animation: rippleAnim 0.6s linear; pointer-events: none;
+    /* =============================================
+       SALE NOTIFICATION TOAST
+    ============================================= */
+    .sale-toast {
+      position: fixed; bottom: 24px; left: 24px;
+      background: #fff; border-radius: 18px;
+      padding: 14px 18px; box-shadow: 0 8px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(232,25,60,0.12);
+      display: flex; align-items: center; gap: 14px; z-index: 8000;
+      max-width: 310px; width: calc(100vw - 48px);
+      transform: translateY(120%); opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;
     }
-    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+    .sale-toast.show { transform: translateY(0); opacity: 1; }
+    .sale-toast-ghost { font-size: 1.8rem; flex-shrink: 0; }
+    .sale-toast-body { flex: 1; min-width: 0; }
+    .sale-toast-title { font-size: 0.78rem; font-weight: 700; color: #E8193C; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+    .sale-toast-commission { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800; color: #111; letter-spacing: -0.01em; }
+    .sale-toast-time { font-size: 0.7rem; color: #999; margin-top: 2px; }
+    .sale-toast-dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; flex-shrink: 0; animation: pulse 2s infinite; }
+
+    /* =============================================
+       DEV MODAL
+    ============================================= */
+    .dev-modal-bg {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      z-index: 10000; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      padding: 20px;
+    }
+    .dev-modal-bg.open { opacity: 1; pointer-events: all; }
+    .dev-modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 28px; padding: 48px 40px; text-align: center;
+      max-width: 400px; width: 100%;
+      transform: scale(0.9); transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+    .dev-modal-bg.open .dev-modal { transform: scale(1); }
+    .dev-modal-ghost { font-size: 3.5rem; margin-bottom: 16px; }
+    .dev-modal h3 {
+      font-family: var(--font-display); font-size: 1.6rem; font-weight: 800;
+      margin-bottom: 10px; letter-spacing: -0.02em;
+    }
+    .dev-modal p { color: var(--muted); font-size: 0.95rem; margin-bottom: 8px; }
+    .dev-modal-by { font-size: 0.8rem; color: rgba(255,255,255,0.25); margin-top: 20px; }
+    .dev-modal-close {
+      margin-top: 28px;
+      background: var(--grad); color: #fff; border: none;
+      padding: 12px 32px; border-radius: 99px; font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .dev-modal-close:hover { transform: scale(1.05); }
+    .dev-modal-x {
+      position: absolute; top: 16px; right: 20px;
+      background: none; border: none; color: var(--muted); font-size: 1.4rem;
+      cursor: pointer; line-height: 1;
+    }
+
+    /* COUNTERS */
+    .counter-num { font-variant-numeric: tabular-nums; }
+
+    /* PERF PANEL */
+    .perf-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--r-lg); padding: 36px; position: relative; overflow: hidden;
+    }
+    .perf-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad); }
+    .perf-label { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.5; margin-bottom: 20px; }
+    .perf-bars { display: flex; flex-direction: column; gap: 18px; }
+    .perf-row { }
+    .perf-row-top { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; }
+    .perf-row-top span:last-child { font-weight: 700; color: #10B981; }
+    .perf-bar-track { height: 8px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; }
+    .perf-bar-fill { height: 100%; border-radius: 99px; background: var(--grad); width: 0; transition: width 1.5s ease; }
+    .perf-bar-fill.green { background: linear-gradient(90deg,#10B981,#059669); }
+    .perf-top1 {
+      margin-top: 20px; padding: 16px; background: rgba(16,185,129,0.08);
+      border: 1px solid rgba(16,185,129,0.2); border-radius: 12px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .perf-top1 .icon { font-size: 1.5rem; }
+    .perf-top1 strong { font-weight: 700; font-size: 0.9rem; display: block; }
+    .perf-top1 span { font-size: 0.78rem; color: var(--muted); }
+
+    @keyframes shake {
+      0%,100%{transform:translateX(0)}
+      20%{transform:translateX(-8px)}
+      40%{transform:translateX(8px)}
+      60%{transform:translateX(-6px)}
+      80%{transform:translateX(6px)}
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0deg); opacity:1; }
+      100% { transform: translateY(300px) rotate(720deg); opacity:0; }
+    }
+    @keyframes barLoad { from { width:0; } }
   </style>
 </head>
 <body>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features" onclick="closeMobileMenu()">Recursos</a>
+    <a href="#methods" onclick="closeMobileMenu()">Pagamentos</a>
+    <a href="#simulator" onclick="closeMobileMenu()">Gateway</a>
+    <a href="#pricing" onclick="closeMobileMenu()">Planos</a>
+    <a href="#rewards" onclick="closeMobileMenu()">Recompensas</a>
+    <div class="mobile-menu-btns">
+      <a href="#" class="btn btn-ghost" onclick="closeMobileMenu(); showDevModal(event)">Entrar</a>
+      <a href="#" class="btn btn-primary" onclick="closeMobileMenu(); showDevModal(event)">Criar conta</a>
+    </div>
+  </div>
+
+  <!-- DEV MODAL -->
+  <div class="dev-modal-bg" id="devModal" onclick="closeDevModal(event)">
+    <div class="dev-modal">
+      <button class="dev-modal-x" onclick="closeDevModalBtn()">×</button>
+      <div class="dev-modal-ghost">
+        <!-- Ghost SVG -->
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 6C20.95 6 12 14.95 12 26v30l6-4.5 6 4.5 6-4.5 6 4.5 6-4.5 6 4.5V26C54 14.95 45.05 6 32 6z" fill="white"/>
+          <ellipse cx="23" cy="25" rx="3.5" ry="2.5" fill="#1a0010"/>
+          <ellipse cx="41" cy="25" rx="3.5" ry="2.5" fill="#1a0010"/>
+          <path d="M27 32 Q32 34 37 32" stroke="#ccc" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+      <h3>Em Desenvolvimento</h3>
+      <p>Este recurso estará disponível em breve.</p>
+      <p style="margin-top:4px;">Estamos trabalhando para você! 🚀</p>
+      <div class="dev-modal-by">By BusinessEnzo</div>
+      <button class="dev-modal-close" onclick="closeDevModalBtn()">Entendido!</button>
+    </div>
+  </div>
+
+  <!-- SALE TOAST -->
+  <div class="sale-toast" id="saleToast">
+    <div class="sale-toast-ghost">
+      <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 6C20.95 6 12 14.95 12 26v30l6-4.5 6 4.5 6-4.5 6 4.5 6-4.5 6 4.5V26C54 14.95 45.05 6 32 6z" fill="url(#gToast)"/>
+        <defs><linearGradient id="gToast" x1="0" y1="0" x2="64" y2="64"><stop stop-color="#E8193C"/><stop offset="1" stop-color="#FF85A1"/></linearGradient></defs>
+        <ellipse cx="23" cy="25" rx="3.5" ry="2.5" fill="white"/>
+        <ellipse cx="41" cy="25" rx="3.5" ry="2.5" fill="white"/>
+        <circle cx="24" cy="25.5" r="1.5" fill="#1a0010"/>
+        <circle cx="42" cy="25.5" r="1.5" fill="#1a0010"/>
+        <path d="M27 32 Q32 34 37 32" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="sale-toast-body">
+      <div class="sale-toast-title" id="toastTitle">Venda realizada no Pix!</div>
+      <div class="sale-toast-commission" id="toastComm">Comissão: R$ 69,95</div>
+      <div class="sale-toast-time">Agora</div>
+    </div>
+    <div class="sale-toast-dot"></div>
+  </div>
 
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <div class="nav-inner">
         <a href="#" class="logo">
-          <!-- Ghost SVG mascot -->
           <svg class="logo-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="gLogo" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
@@ -657,21 +928,14 @@
                 <stop offset="1" stop-color="#FF85A1"/>
               </linearGradient>
             </defs>
-            <!-- body -->
             <path d="M22 4C13.16 4 6 11.16 6 20v18l4-3 4 3 4-3 4 3 4-3 4 3 4-3V20C38 11.16 30.84 4 22 4z" fill="url(#gLogo)"/>
-            <!-- eyes -->
-            <ellipse cx="16" cy="19" rx="2.8" ry="3.2" fill="white"/>
-            <ellipse cx="28" cy="19" rx="2.8" ry="3.2" fill="white"/>
-            <circle cx="16.8" cy="19.6" r="1.4" fill="#1a0010"/>
-            <circle cx="28.8" cy="19.6" r="1.4" fill="#1a0010"/>
-            <!-- hand on mouth -->
-            <path d="M15 26 Q22 30 29 26" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <!-- finger gesture -->
-            <path d="M19 26 Q19.5 28.5 21 29" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-            <!-- PIX sparkle -->
+            <ellipse cx="16" cy="19" rx="2.4" ry="1.8" fill="white"/>
+            <ellipse cx="28" cy="19" rx="2.4" ry="1.8" fill="white"/>
+            <circle cx="16.8" cy="19.4" r="1.2" fill="#1a0010"/>
+            <circle cx="28.8" cy="19.4" r="1.2" fill="#1a0010"/>
+            <path d="M16 25 Q22 27.5 28 25" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
             <circle cx="35" cy="9" r="2" fill="#10B981" opacity="0.9"/>
             <circle cx="33" cy="5" r="1.2" fill="#F59E0B" opacity="0.8"/>
-            <circle cx="37" cy="6" r="1" fill="#FF85A1" opacity="0.9"/>
           </svg>
           <span class="logo-text">BusinessPay</span>
         </a>
@@ -680,12 +944,13 @@
           <li><a href="#methods">Pagamentos</a></li>
           <li><a href="#simulator">Gateway</a></li>
           <li><a href="#pricing">Planos</a></li>
+          <li><a href="#rewards">Recompensas</a></li>
         </ul>
         <div class="nav-cta">
-          <a href="#" class="btn btn-ghost">Entrar</a>
-          <a href="#" class="btn btn-primary">Criar conta</a>
+          <a href="#" class="btn btn-ghost" onclick="showDevModal(event)">Entrar</a>
+          <a href="#" class="btn btn-primary" onclick="showDevModal(event)">Criar conta</a>
         </div>
-        <button class="hamburger" aria-label="Menu">
+        <button class="hamburger" id="hamburger" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -709,18 +974,18 @@
             A tecnologia que trabalha enquanto você só fatura. PIX, Cartão e Boleto com a maior taxa de conversão do mercado.
           </p>
           <div class="hero-btns hero-animate-4">
-            <a href="#" class="btn btn-primary btn-lg">
+            <a href="#" class="btn btn-primary btn-lg" onclick="showDevModal(event)">
               <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
               Criar conta grátis
             </a>
-            <a href="#" class="btn btn-ghost btn-lg">Falar com especialista</a>
+            <a href="#" class="btn btn-ghost btn-lg" onclick="showDevModal(event)">Falar com especialista</a>
           </div>
           <div class="hero-proof hero-animate-4">
             <div class="avatars">
               <span>JM</span><span>AS</span><span>PL</span><span>+</span>
             </div>
             <div class="proof-text">
-              <strong>+3.000 clientes</strong>
+              <strong>+<span class="counter-num" data-target="3847" data-step="1">3.000</span> clientes</strong>
               confiando na BusinessPay hoje
             </div>
           </div>
@@ -738,28 +1003,28 @@
               <div class="mini-bar-label"><span>Meta diária</span><span>78% atingido</span></div>
               <div class="txn-list">
                 <div class="txn-item">
-                  <div class="txn-icon">⚡</div>
+                  <div class="txn-icon" id="ti0">⚡</div>
                   <div class="txn-info">
-                    <strong>PIX Aprovado</strong>
-                    <span>há 2 segundos</span>
+                    <strong id="tn0">PIX Aprovado</strong>
+                    <span id="ts0">há 2 segundos</span>
                   </div>
-                  <span class="txn-amount plus">+R$ 297</span>
+                  <span class="txn-amount plus" id="ta0">+R$ 297</span>
                 </div>
                 <div class="txn-item">
-                  <div class="txn-icon">💳</div>
+                  <div class="txn-icon" id="ti1">💳</div>
                   <div class="txn-info">
-                    <strong>Cartão Aprovado</strong>
-                    <span>há 18 segundos</span>
+                    <strong id="tn1">Cartão Aprovado</strong>
+                    <span id="ts1">há 18 segundos</span>
                   </div>
-                  <span class="txn-amount plus">+R$ 1.490</span>
+                  <span class="txn-amount plus" id="ta1">+R$ 1.490</span>
                 </div>
                 <div class="txn-item">
-                  <div class="txn-icon">📄</div>
+                  <div class="txn-icon" id="ti2">📄</div>
                   <div class="txn-info">
-                    <strong>Boleto Pago</strong>
-                    <span>há 1 minuto</span>
+                    <strong id="tn2">Boleto Pago</strong>
+                    <span id="ts2">há 1 minuto</span>
                   </div>
-                  <span class="txn-amount plus">+R$ 750</span>
+                  <span class="txn-amount plus" id="ta2">+R$ 750</span>
                 </div>
               </div>
             </div>
@@ -781,11 +1046,17 @@
   <div id="proof-bar">
     <div class="container">
       <div class="proof-bar-inner">
-        <div class="proof-num reveal"><div class="n">+3.000</div><div class="l">Clientes ativos</div></div>
+        <div class="proof-num reveal">
+          <div class="n"><span class="counter-num" data-target="3847" data-prefix="+">+3.000</span></div>
+          <div class="l">Clientes ativos</div>
+        </div>
         <div class="proof-div"></div>
         <div class="proof-num reveal reveal-delay-1"><div class="n">98,7%</div><div class="l">Taxa de aprovação</div></div>
         <div class="proof-div"></div>
-        <div class="proof-num reveal reveal-delay-2"><div class="n">R$ 2B+</div><div class="l">Processados</div></div>
+        <div class="proof-num reveal reveal-delay-2">
+          <div class="n">R$ <span class="counter-num" data-target="2" data-suffix="B+">2B+</span></div>
+          <div class="l">Processados</div>
+        </div>
         <div class="proof-div"></div>
         <div class="proof-num reveal reveal-delay-3"><div class="n">0</div><div class="l">Bloqueios injustos</div></div>
         <div class="proof-div"></div>
@@ -849,7 +1120,7 @@
           Aprovação <span class="grad-text">inteligente</span> em 4 passos
         </h2>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start">
+      <div class="how-grid">
         <div class="steps">
           <div class="step reveal">
             <div class="step-num">1</div>
@@ -880,29 +1151,28 @@
             </div>
           </div>
         </div>
-        <div class="reveal reveal-delay-2" style="position:sticky;top:120px">
-          <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:36px;position:relative;overflow:hidden">
-            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)"></div>
-            <div style="font-family:var(--font-display);font-size:0.85rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;margin-bottom:20px">Performance</div>
-            <div style="display:flex;flex-direction:column;gap:18px">
-              <div>
-                <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px"><span>Taxa de aprovação PIX</span><span style="font-weight:700;color:#10B981">99,2%</span></div>
-                <div style="height:8px;background:rgba(255,255,255,0.07);border-radius:99px;overflow:hidden"><div style="height:100%;width:99.2%;background:var(--grad);border-radius:99px;animation:barLoad 1.5s ease forwards" class="bar-anim"></div></div>
+        <div class="reveal reveal-delay-2">
+          <div class="perf-card">
+            <div class="perf-label">Performance</div>
+            <div class="perf-bars">
+              <div class="perf-row">
+                <div class="perf-row-top"><span>Taxa de aprovação PIX</span><span>99,2%</span></div>
+                <div class="perf-bar-track"><div class="perf-bar-fill" data-width="99.2"></div></div>
               </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px"><span>Taxa de aprovação Cartão</span><span style="font-weight:700;color:#10B981">97,8%</span></div>
-                <div style="height:8px;background:rgba(255,255,255,0.07);border-radius:99px;overflow:hidden"><div style="height:100%;width:97.8%;background:var(--grad);border-radius:99px;animation:barLoad 1.8s ease forwards"></div></div>
+              <div class="perf-row">
+                <div class="perf-row-top"><span>Taxa de aprovação Cartão</span><span>97,8%</span></div>
+                <div class="perf-bar-track"><div class="perf-bar-fill" data-width="97.8"></div></div>
               </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px"><span>Uptime da plataforma</span><span style="font-weight:700;color:#10B981">99,99%</span></div>
-                <div style="height:8px;background:rgba(255,255,255,0.07);border-radius:99px;overflow:hidden"><div style="height:100%;width:99.99%;background:linear-gradient(90deg,#10B981,#059669);border-radius:99px;animation:barLoad 2s ease forwards"></div></div>
+              <div class="perf-row">
+                <div class="perf-row-top"><span>Uptime da plataforma</span><span>99,99%</span></div>
+                <div class="perf-bar-track"><div class="perf-bar-fill green" data-width="99.99"></div></div>
               </div>
-              <div style="margin-top:8px;padding:16px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:12px;display:flex;align-items:center;gap:12px">
-                <span style="font-size:1.5rem">🏆</span>
-                <div>
-                  <div style="font-weight:700;font-size:0.9rem">Top 1% do mercado</div>
-                  <div style="font-size:0.78rem;color:var(--muted)">Em taxa de aprovação</div>
-                </div>
+            </div>
+            <div class="perf-top1">
+              <div class="icon">🏆</div>
+              <div>
+                <strong>Top 1% do mercado</strong>
+                <span>Em taxa de aprovação</span>
               </div>
             </div>
           </div>
@@ -911,7 +1181,7 @@
     </div>
   </section>
 
-  <!-- PAYMENT METHODS -->
+  <!-- METHODS -->
   <section id="methods">
     <div class="container">
       <div class="section-header reveal">
@@ -1008,7 +1278,6 @@
         </div>
         <div class="reveal reveal-delay-2">
           <div class="pay-form" id="payForm">
-            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)"></div>
             <h3>Simular Pagamento</h3>
             <p class="pay-sub">Preencha os dados e experimente nossa aprovação</p>
             <div class="form-group">
@@ -1057,14 +1326,12 @@
               <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
               Transação 100% segura e criptografada
             </div>
-
-            <!-- Success state -->
             <div class="pay-success" id="paySuccess">
               <div class="success-icon">✅</div>
               <div class="success-title">Aprovado!</div>
-              <div class="success-sub" id="successMsg">Pagamento processado com sucesso pela BusinessPay</div>
+              <div class="success-sub" id="successMsg">Pagamento processado com sucesso</div>
               <div class="success-badge" id="successBadge">PIX processado em 1.2s</div>
-              <button class="btn btn-ghost success-reset" onclick="resetPay()">Simular novamente</button>
+              <button class="btn btn-ghost success-reset" style="margin-top:6px" onclick="resetPay()">Simular novamente</button>
             </div>
           </div>
         </div>
@@ -1093,7 +1360,7 @@
             <li>Suporte por e-mail</li>
             <li>Saques em D+1</li>
           </ul>
-          <a href="#" class="price-btn-ghost">Começar grátis</a>
+          <a href="#" class="price-btn-ghost" onclick="showDevModal(event)">Começar grátis</a>
         </div>
         <div class="price-card featured reveal reveal-delay-1">
           <span class="price-badge-popular">Mais popular</span>
@@ -1108,7 +1375,7 @@
             <li>Anti-fraude avançado</li>
             <li>API completa + Webhooks</li>
           </ul>
-          <a href="#" class="price-btn-white">Assinar Pro</a>
+          <a href="#" class="price-btn-white" onclick="showDevModal(event)">Assinar Pro</a>
         </div>
         <div class="price-card reveal reveal-delay-2">
           <div class="price-plan">Enterprise</div>
@@ -1121,7 +1388,168 @@
             <li>Integração customizada</li>
             <li>Gerente de conta exclusivo</li>
           </ul>
-          <a href="#" class="price-btn-ghost">Falar com vendas</a>
+          <a href="#" class="price-btn-ghost" onclick="showDevModal(event)">Falar com vendas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REWARDS -->
+  <section id="rewards">
+    <div class="blob blob-3" style="opacity:0.4"></div>
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="tag"><span class="dot"></span>Programa de Recompensas</span>
+        <h2 class="section-title" style="margin-top:20px">
+          Fature mais,<br><span class="grad-text">ganhe mais</span>
+        </h2>
+        <p class="section-sub">A BusinessPay recompensa quem performa. Quanto mais você vende, mais você ganha — além do dinheiro.</p>
+      </div>
+      <div class="rewards-grid">
+        <!-- 100k -->
+        <div class="reward-card reveal">
+          <div class="reward-level">Nível Bronze</div>
+          <div class="reward-plaque">
+            <div class="reward-plaque-ghost">
+              <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+                <path d="M32 6C20.95 6 12 14.95 12 26v30l6-4.5 6 4.5 6-4.5 6 4.5 6-4.5 6 4.5V26C54 14.95 45.05 6 32 6z" fill="white" opacity="0.9"/>
+                <ellipse cx="23" cy="25" rx="3" ry="2.2" fill="#1a0010"/>
+                <ellipse cx="41" cy="25" rx="3" ry="2.2" fill="#1a0010"/>
+                <path d="M27 32 Q32 34 37 32" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+              </svg>
+            </div>
+            <div class="reward-plaque-name">BusinessPay</div>
+          </div>
+          <div class="reward-milestone">R$ 100 mil</div>
+          <ul class="reward-items">
+            <li>Placa Exclusiva BusinessPay</li>
+            <li>iPhone 17 Pro Max</li>
+            <li>Concorre viagem a Dubai</li>
+          </ul>
+        </div>
+        <!-- 500k -->
+        <div class="reward-card reveal reveal-delay-1">
+          <div class="reward-level">Nível Silver</div>
+          <div class="reward-plaque">
+            <div class="reward-plaque-ghost">
+              <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+                <path d="M32 6C20.95 6 12 14.95 12 26v30l6-4.5 6 4.5 6-4.5 6 4.5 6-4.5 6 4.5V26C54 14.95 45.05 6 32 6z" fill="white" opacity="0.9"/>
+                <ellipse cx="23" cy="25" rx="3" ry="2.2" fill="#1a0010"/>
+                <ellipse cx="41" cy="25" rx="3" ry="2.2" fill="#1a0010"/>
+                <path d="M27 32 Q32 34 37 32" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+              </svg>
+            </div>
+            <div class="reward-plaque-name">BusinessPay</div>
+          </div>
+          <div class="reward-milestone">R$ 500 mil</div>
+          <ul class="reward-items">
+            <li>Placa Premium BusinessPay</li>
+            <li>MacBook Pro</li>
+            <li>Camisa Exclusiva</li>
+          </ul>
+        </div>
+        <!-- 1M -->
+        <div class="reward-card reveal reveal-delay-2">
+          <div class="reward-level">Nível Gold</div>
+          <div class="reward-plaque">
+            <div class="reward-plaque-ghost">
+              <svg width="36" height="36" viewBox="0 0 64 64" fill="none">
+                <path d="M32 6C20.95 6 12 14.95 12 26v30l6-4.5 6 4.5 6-4.5 6 4.5 6-4.5 6 4.5V26C54 14.95 45.05 6 32 6z" fill="url(#gR1)"/>
+                <defs><linearGradient id="gR1" x1="0" y1="0" x2="64" y2="64"><stop stop-color="#E8193C"/><stop offset="1" stop-color="#FF85A1"/></linearGradient></defs>
+                <ellipse cx="23" cy="25" rx="3" ry="2.2" fill="white"/>
+                <ellipse cx="41" cy="25" rx="3" ry="2.2" fill="white"/>
+                <circle cx="24" cy="25.4" r="1.2" fill="#1a0010"/>
+                <circle cx="42" cy="25.4" r="1.2" fill="#1a0010"/>
+                <path d="M27 32 Q32 34 37 32" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+              </svg>
+            </div>
+            <div class="reward-plaque-name">BusinessPay</div>
+          </div>
+          <div class="reward-milestone">R$ 1 milhão</div>
+          <ul class="reward-items">
+            <li>Placa Ouro BusinessPay</li>
+            <li>MacBook Pro M4</li>
+            <li>Camisa Exclusiva</li>
+          </ul>
+        </div>
+        <!-- 5M -->
+        <div class="reward-card premium reveal reveal-delay-3">
+          <div class="reward-level">Nível Diamante ✦</div>
+          <div class="reward-plaque">
+            <div class="reward-plaque-ghost">
+              <svg width="44" height="44" viewBox="0 0 64 64" fill="none">
+                <path d="M32 6C20.95 6 12 14.95 12 26v30l6-4.5 6 4.5 6-4.5 6 4.5 6-4.5 6 4.5V26C54 14.95 45.05 6 32 6z" fill="url(#gR2)"/>
+                <defs><linearGradient id="gR2" x1="0" y1="0" x2="64" y2="64"><stop stop-color="#E8193C"/><stop offset="1" stop-color="#FF85A1"/></linearGradient></defs>
+                <ellipse cx="23" cy="25" rx="3" ry="2.2" fill="white"/>
+                <ellipse cx="41" cy="25" rx="3" ry="2.2" fill="white"/>
+                <circle cx="24" cy="25.4" r="1.2" fill="#1a0010"/>
+                <circle cx="42" cy="25.4" r="1.2" fill="#1a0010"/>
+                <path d="M27 32 Q32 34 37 32" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                <circle cx="50" cy="14" r="3" fill="#F59E0B" opacity="0.9"/>
+                <circle cx="14" cy="14" r="2" fill="#10B981" opacity="0.9"/>
+              </svg>
+            </div>
+            <div class="reward-plaque-name">BusinessPay</div>
+          </div>
+          <div class="reward-milestone">R$ 5 milhões</div>
+          <ul class="reward-items">
+            <li>Placa Diamante Premium</li>
+            <li>Viagem a Dubai ✈️</li>
+            <li>MacBook Pro M4 Max</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHIRT SECTION -->
+  <section id="shirt">
+    <div class="container">
+      <div class="shirt-wrap">
+        <div class="shirt-visual reveal">
+          <div class="shirt-svg-wrap">
+            <!-- Black Streetwear T-Shirt SVG -->
+            <svg width="320" height="340" viewBox="0 0 320 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Shirt body -->
+              <path d="M100 30 L60 50 L20 100 L60 110 L60 300 L260 300 L260 110 L300 100 L260 50 L220 30 L200 55 C190 75 170 85 160 85 C150 85 130 75 120 55 Z" fill="#111111"/>
+              <!-- Shirt collar shadow -->
+              <path d="M120 55 C130 75 150 85 160 85 C170 85 190 75 200 55" stroke="#222" stroke-width="2" fill="none"/>
+              <!-- Sleeve left -->
+              <path d="M60 50 L20 100 L60 110 L80 80 Z" fill="#0D0D0D"/>
+              <!-- Sleeve right -->
+              <path d="M260 50 L300 100 L260 110 L240 80 Z" fill="#0D0D0D"/>
+              <!-- Ghost on back (centered large) -->
+              <g transform="translate(110, 100)">
+                <!-- Ghost body -->
+                <path d="M50 10C30.67 10 15 25.67 15 45v45l8-6 8 6 8-6 8 6 8-6 8 6 8-6V45C85 25.67 69.33 10 50 10z" fill="white" opacity="0.92"/>
+                <!-- Eyes -->
+                <ellipse cx="38" cy="42" rx="5.5" ry="4" fill="#111"/>
+                <ellipse cx="62" cy="42" rx="5.5" ry="4" fill="#111"/>
+                <!-- Pupils -->
+                <circle cx="39.5" cy="43" r="2.5" fill="#0a0a0a"/>
+                <circle cx="63.5" cy="43" r="2.5" fill="#0a0a0a"/>
+                <!-- Mouth (serious flat line) -->
+                <path d="M43 54 Q50 56 57 54" stroke="#ccc" stroke-width="2" stroke-linecap="round" fill="none"/>
+              </g>
+              <!-- BusinessPay text on shirt -->
+              <text x="160" y="235" text-anchor="middle" fill="rgba(255,255,255,0.15)" font-family="sans-serif" font-size="11" font-weight="bold" letter-spacing="3">BUSINESSPAY</text>
+              <!-- Subtle fabric texture lines -->
+              <line x1="60" y1="110" x2="60" y2="300" stroke="#1a1a1a" stroke-width="1"/>
+              <line x1="260" y1="110" x2="260" y2="300" stroke="#1a1a1a" stroke-width="1"/>
+            </svg>
+          </div>
+        </div>
+        <div class="shirt-info reveal reveal-delay-1">
+          <span class="tag" style="margin-bottom:20px"><span class="dot"></span>Merch Exclusivo</span>
+          <h2>Camisa <span class="grad-text">BusinessPay</span></h2>
+          <p>Estilo streetwear moderno com o fantasma BusinessPay em destaque nas costas. Preta, premium, exclusiva para quem faz parte da família.</p>
+          <p style="margin-top:0;margin-bottom:28px">Disponível para afiliados que atingem as metas de recompensa. Qualidade fintech, do nosso universo para o seu look.</p>
+          <div class="shirt-tags">
+            <span class="shirt-tag">👻 Fantasma nas costas</span>
+            <span class="shirt-tag">🖤 Preta premium</span>
+            <span class="shirt-tag">🏙️ Streetwear</span>
+            <span class="shirt-tag">✨ Exclusiva</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1134,8 +1562,8 @@
         <h2>Pare de perder vendas.<br>Comece a faturar mais hoje.</h2>
         <p>Mais de 3.000 negócios já escolheram a BusinessPay. Sua operação pode ser a próxima.</p>
         <div class="cta-btns">
-          <a href="#" class="btn btn-white btn-lg">Criar conta grátis agora</a>
-          <a href="#" class="btn btn-outline-white btn-lg">Ver demonstração</a>
+          <a href="#" class="btn btn-white btn-lg" onclick="showDevModal(event)">Criar conta grátis agora</a>
+          <a href="#" class="btn btn-outline-white btn-lg" onclick="showDevModal(event)">Ver demonstração</a>
         </div>
       </div>
     </div>
@@ -1150,11 +1578,11 @@
             <svg width="36" height="36" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs><linearGradient id="gF" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#E8193C"/><stop offset="1" stop-color="#FF85A1"/></linearGradient></defs>
               <path d="M22 4C13.16 4 6 11.16 6 20v18l4-3 4 3 4-3 4 3 4-3 4 3 4-3V20C38 11.16 30.84 4 22 4z" fill="url(#gF)"/>
-              <ellipse cx="16" cy="19" rx="2.8" ry="3.2" fill="white"/>
-              <ellipse cx="28" cy="19" rx="2.8" ry="3.2" fill="white"/>
-              <circle cx="16.8" cy="19.6" r="1.4" fill="#1a0010"/>
-              <circle cx="28.8" cy="19.6" r="1.4" fill="#1a0010"/>
-              <path d="M15 26 Q22 30 29 26" stroke="white" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+              <ellipse cx="16" cy="19" rx="2.4" ry="1.8" fill="white"/>
+              <ellipse cx="28" cy="19" rx="2.4" ry="1.8" fill="white"/>
+              <circle cx="16.8" cy="19.4" r="1.2" fill="#1a0010"/>
+              <circle cx="28.8" cy="19.4" r="1.2" fill="#1a0010"/>
+              <path d="M16 25 Q22 27.5 28 25" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
             </svg>
             <span class="logo-text">BusinessPay</span>
           </a>
@@ -1163,33 +1591,33 @@
         <div class="footer-col">
           <h5>Produto</h5>
           <ul>
-            <li><a href="#">Recursos</a></li>
-            <li><a href="#">Integrações</a></li>
-            <li><a href="#">API Docs</a></li>
-            <li><a href="#">Changelog</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Recursos</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Integrações</a></li>
+            <li><a href="#" onclick="showDevModal(event)">API Docs</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Changelog</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h5>Empresa</h5>
           <ul>
-            <li><a href="#">Sobre nós</a></li>
-            <li><a href="#">Carreiras</a></li>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Imprensa</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Sobre nós</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Carreiras</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Blog</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Imprensa</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h5>Suporte</h5>
           <ul>
-            <li><a href="#">Central de ajuda</a></li>
-            <li><a href="#">Status</a></li>
-            <li><a href="#">Contato</a></li>
-            <li><a href="#">Termos</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Central de ajuda</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Status</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Contato</a></li>
+            <li><a href="#" onclick="showDevModal(event)">Termos</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 BusinessPay. Todos os direitos reservados.</p>
+        <p>© 2026 BusinessPay. Todos os direitos reservados.</p>
         <div class="footer-badges">
           <span class="f-badge">🔒 PCI-DSS</span>
           <span class="f-badge">🏦 BACEN</span>
@@ -1201,17 +1629,42 @@
   </footer>
 
   <script>
-    /* =============================================
-       NAVBAR SCROLL
-    ============================================= */
+    /* === NAVBAR SCROLL === */
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 40);
     });
 
-    /* =============================================
-       INTERSECTION OBSERVER — REVEAL
-    ============================================= */
+    /* === HAMBURGER MENU === */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    function closeMobileMenu() {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      hamburger.classList.toggle('active', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    /* === DEV MODAL === */
+    function showDevModal(e) {
+      if (e) e.preventDefault();
+      document.getElementById('devModal').classList.add('open');
+    }
+    function closeDevModal(e) {
+      if (e.target === document.getElementById('devModal')) closeDevModalBtn();
+    }
+    function closeDevModalBtn() {
+      document.getElementById('devModal').classList.remove('open');
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeDevModalBtn();
+    });
+
+    /* === SCROLL REVEAL === */
     const reveals = document.querySelectorAll('.reveal');
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -1223,9 +1676,35 @@
     }, { threshold: 0.12 });
     reveals.forEach(r => obs.observe(r));
 
-    /* =============================================
-       PAYMENT SIMULATOR
-    ============================================= */
+    /* === PERF BARS === */
+    const barObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const fills = e.target.querySelectorAll('.perf-bar-fill');
+          fills.forEach(f => {
+            f.style.width = f.dataset.width + '%';
+          });
+          barObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.perf-card').forEach(p => barObs.observe(p));
+
+    /* === RIPPLE === */
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        if (e.defaultPrevented && !this.hasAttribute('data-ripple')) return;
+        const rect = this.getBoundingClientRect();
+        const r = document.createElement('span');
+        r.className = 'ripple';
+        const size = Math.max(rect.width, rect.height);
+        r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;`;
+        this.appendChild(r);
+        setTimeout(() => r.remove(), 700);
+      });
+    });
+
+    /* === PAYMENT SIMULATOR === */
     const methodSel = document.getElementById('payMethod');
     const cardFields = document.getElementById('cardFields');
     const payValue = document.getElementById('payValue');
@@ -1240,7 +1719,6 @@
       payTotalDisplay.textContent = 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
     });
 
-    // Card number formatting
     const cardNum = document.getElementById('cardNum');
     if (cardNum) {
       cardNum.addEventListener('input', (e) => {
@@ -1253,23 +1731,18 @@
       const name = document.getElementById('payName').value.trim();
       const val  = parseFloat(payValue.value) || 0;
       const method = methodSel.value;
-
       if (!name || val <= 0) {
-        // Shake animation
         const form = document.getElementById('payForm');
         form.style.animation = 'shake 0.4s ease';
         setTimeout(() => form.style.animation = '', 400);
         return;
       }
-
       const btn = document.getElementById('payBtn');
       btn.innerHTML = '<span style="animation:spin 0.8s linear infinite;display:inline-block">⚙️</span> Processando...';
       btn.disabled = true;
-
       const times = { pix: 1.2, card: 2.4, boleto: 0.8 };
       const labels = { pix: '⚡ PIX', card: '💳 Cartão', boleto: '📄 Boleto' };
       const t = times[method];
-
       setTimeout(() => {
         document.getElementById('successMsg').textContent =
           `R$ ${val.toLocaleString('pt-BR',{minimumFractionDigits:2})} aprovado para ${name}`;
@@ -1290,113 +1763,100 @@
       btn.disabled = false;
     }
 
-    /* Confetti */
     function confetti() {
       const colors = ['#E8193C','#FF4D7E','#FF85A1','#10B981','#F59E0B','#fff'];
       for (let i = 0; i < 60; i++) {
         const c = document.createElement('div');
         c.style.cssText = `
-          position:fixed; width:${4+Math.random()*6}px; height:${4+Math.random()*6}px;
+          position:fixed;width:${4+Math.random()*6}px;height:${4+Math.random()*6}px;
           background:${colors[Math.floor(Math.random()*colors.length)]};
           border-radius:${Math.random()>0.5?'50%':'2px'};
-          left:${30+Math.random()*40}%; top:30%;
-          animation: confettiFall ${1+Math.random()*2}s ease-out forwards;
-          z-index:9998; pointer-events:none;
-          transform: rotate(${Math.random()*360}deg);
+          left:${30+Math.random()*40}%;top:30%;
+          animation:confettiFall ${1+Math.random()*2}s ease-out forwards;
+          z-index:9998;pointer-events:none;
+          transform:rotate(${Math.random()*360}deg);
         `;
         document.body.appendChild(c);
         setTimeout(() => c.remove(), 3000);
       }
     }
 
-    /* =============================================
-       RIPPLE EFFECT ON BUTTONS
-    ============================================= */
-    document.querySelectorAll('.btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        const rect = this.getBoundingClientRect();
-        const r = document.createElement('span');
-        r.className = 'ripple';
-        const size = Math.max(rect.width, rect.height);
-        r.style.cssText = `
-          width:${size}px; height:${size}px;
-          left:${e.clientX-rect.left-size/2}px;
-          top:${e.clientY-rect.top-size/2}px;
-        `;
-        this.appendChild(r);
-        setTimeout(() => r.remove(), 700);
-      });
-    });
-
-    /* =============================================
-       LIVE TICKER (hero card)
-    ============================================= */
+    /* === LIVE TICKER === */
     const txns = [
-      ['⚡','PIX Aprovado','+R$ 197'],
-      ['💳','Cartão Aprovado','+R$ 2.490'],
-      ['📄','Boleto Pago','+R$ 890'],
-      ['⚡','PIX Aprovado','+R$ 47'],
-      ['💳','Cartão Parcelado','+R$ 3.980'],
+      ['⚡','PIX Aprovado','+R$ 197','há 1 segundo'],
+      ['💳','Cartão Aprovado','+R$ 2.490','há 5 segundos'],
+      ['📄','Boleto Pago','+R$ 890','há 12 segundos'],
+      ['⚡','PIX Aprovado','+R$ 47','há 2 segundos'],
+      ['💳','Cartão Parcelado','+R$ 3.980','há 8 segundos'],
+      ['⚡','PIX Instantâneo','+R$ 599','agora mesmo'],
     ];
-    let idx = 0;
+    let txnIdx = 0;
     setInterval(() => {
-      idx = (idx + 1) % txns.length;
-      const items = document.querySelectorAll('.txn-item');
-      if (items.length) {
-        // Rotate first item
-        const first = items[0];
-        first.style.opacity = '0';
-        first.style.transform = 'translateX(-20px)';
-        setTimeout(() => {
-          first.querySelector('.txn-icon').textContent = txns[idx][0];
-          first.querySelector('strong').textContent = txns[idx][1];
-          first.querySelector('.txn-amount').textContent = txns[idx][2];
-          first.querySelector('span').textContent = 'agora mesmo';
-          first.style.opacity = '1';
-          first.style.transform = 'translateX(0)';
-          first.style.transition = 'all 0.4s ease';
-        }, 300);
-      }
+      txnIdx = (txnIdx + 1) % txns.length;
+      const [ico, name, amt, time] = txns[txnIdx];
+      const i0 = document.getElementById('ti0');
+      if (!i0) return;
+      i0.style.opacity = '0';
+      i0.style.transform = 'translateX(-10px)';
+      setTimeout(() => {
+        document.getElementById('ti0').textContent = ico;
+        document.getElementById('tn0').textContent = name;
+        document.getElementById('ts0').textContent = time;
+        document.getElementById('ta0').textContent = amt;
+        i0.style.opacity = '1';
+        i0.style.transform = 'translateX(0)';
+        i0.style.transition = 'all 0.4s ease';
+      }, 300);
     }, 3000);
 
-    /* =============================================
-       DYNAMIC BAR ANIMATIONS
-    ============================================= */
-    const barObs = new IntersectionObserver(entries => {
+    /* === SALE NOTIFICATIONS === */
+    const saleNotifs = [
+      { title: 'Venda realizada no Pix!', comm: 'Comissão: R$ 69,95' },
+      { title: 'Venda no Cartão aprovada!', comm: 'Comissão: R$ 149,50' },
+      { title: 'Boleto compensado!', comm: 'Comissão: R$ 34,80' },
+      { title: 'Venda realizada no Pix!', comm: 'Comissão: R$ 97,00' },
+      { title: 'Nova venda no Cartão!', comm: 'Comissão: R$ 210,00' },
+    ];
+    let saleIdx = 0;
+    const saleToast = document.getElementById('saleToast');
+    function showSaleToast() {
+      const n = saleNotifs[saleIdx % saleNotifs.length];
+      saleIdx++;
+      document.getElementById('toastTitle').textContent = n.title;
+      document.getElementById('toastComm').textContent = n.comm;
+      saleToast.classList.add('show');
+      setTimeout(() => saleToast.classList.remove('show'), 4000);
+    }
+    // First toast after 3s, then every 8s
+    setTimeout(() => {
+      showSaleToast();
+      setInterval(showSaleToast, 8000);
+    }, 3000);
+
+    /* === ANIMATED COUNTERS === */
+    function animateCounter(el, target, prefix='', suffix='') {
+      const duration = 2000;
+      const step = target / (duration / 16);
+      let current = 0;
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = prefix + Math.floor(current).toLocaleString('pt-BR') + suffix;
+        if (current >= target) clearInterval(timer);
+      }, 16);
+    }
+    const counterObs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          e.target.style.width = e.target.dataset.width || '80%';
-          barObs.unobserve(e.target);
+          const el = e.target;
+          const target = parseInt(el.dataset.target);
+          const prefix = el.dataset.prefix || '';
+          const suffix = el.dataset.suffix || '';
+          animateCounter(el, target, prefix, suffix);
+          counterObs.unobserve(el);
         }
       });
-    }, { threshold: 0.3 });
-
-    /* =============================================
-       GLOBAL STYLES INJECTED
-    ============================================= */
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes shake {
-        0%,100%{transform:translateX(0)}
-        20%{transform:translateX(-8px)}
-        40%{transform:translateX(8px)}
-        60%{transform:translateX(-6px)}
-        80%{transform:translateX(6px)}
-      }
-      @keyframes spin { to { transform: rotate(360deg); } }
-      @keyframes confettiFall {
-        0%   { transform: translateY(0) rotate(0deg); opacity:1; }
-        100% { transform: translateY(300px) rotate(720deg); opacity:0; }
-      }
-      @keyframes barLoad { from { width:0; } }
-      .txn-item { transition: all 0.4s ease; }
-    `;
-    document.head.appendChild(style);
-
-    /* Hamburger toggle placeholder */
-    document.querySelector('.hamburger')?.addEventListener('click', () => {
-      alert('Menu móvel — adicione sua navegação aqui!');
-    });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.counter-num[data-target]').forEach(el => counterObs.observe(el));
   </script>
 </body>
 </html>
